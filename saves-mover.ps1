@@ -1,2 +1,15 @@
-﻿Move-Item -Path "C:\Users\lewwa_000\YandexDisk\Application Data\Wesnoth\*" -Destination "C:\Users
-\lewwa_000\PortableApps\WesnothPortable\Data\settings\saves"
+﻿# Config
+$strConfigFile = Join-Path -Path $home -ChildPath saves-mover.psd1
+try {
+$ConfigFile = Import-PowerShellDataFile $strConfigFile 
+} catch <#[FileNotFound]#> {
+New-Config
+$ConfigFile = Import-PowerShellDataFile $strConfigFile 
+} finally {
+$pathYandexDiskWesnothSaves = $ConfigFile.pathYandexDiskWesnothSaves
+$pathWesnothSaves = $ConfigFile.pathWesnothSaves
+}
+
+function Copy-Saves () {
+Copy-Item -Path $pathYandexDiskWesnothSaves -Destination $pathWesnothSaves
+}
